@@ -1,0 +1,82 @@
+@import "root.css";
+
+html {
+    background-color: #21293e;
+}
+
+body {
+    flex-direction: column;
+    /* 水平居中，垂直不居中 */
+    justify-content: normal;
+    align-items: center;
+    padding: 0;
+    margin: 3rem;
+    font-family: "Source Han Serif SC", SansSerif, serif, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+}
+
+.banner {
+    width: 100%;
+    display: flex;
+    flex-direction: row-reverse;
+
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    background-color: #262542;
+    color: #fff;
+    font-size: 1.5rem;
+}
+
+.header {
+    width: 100%;
+    height: 3840px;
+    position: relative;
+    background-image: url("../resource/Lawrencium.jpg");
+    background-repeat: no-repeat;
+    background-size: 100%;
+    margin-bottom: 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 1rem;
+}
+
+.header span {
+    color: #fff;
+    font-size: 3rem;
+    text-align: center;
+}
+
+a {
+    color: #ffffff;
+}
+
+.container {
+    display: flex;
+    flex: 1;
+    max-width: 1200px;
+}
+
+/* pictures in each column automatically adapt */
+.column {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.item {
+    margin: 4px 7px;
+}
+
+img {
+    width: 300px;
+    border-radius: 1rem;
+    transition: transform 0.5s;
+    box-shadow: rgb(0 0 0 / 50%) 0 15px 25px
+}
+
+img:hover,
+img:focus {
+    transform: scale(1.05);
+    transition: 0.5s;
+}

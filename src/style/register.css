@@ -1,0 +1,23 @@
+@import "login.css";
+
+.terms {
+    display: flex;
+}
+
+.terms-check {
+    height: 15px;
+    width: 15px;
+    margin-right: 0.5rem;
+}
+
+.terms-check:focus {
+    outline: none;
+    transition: 0.3s;
+}
+
+.terms-check,
+.terms-text {
+    color: #4b5057;
+}
+
+
