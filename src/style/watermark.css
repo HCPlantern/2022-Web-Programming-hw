@@ -36,15 +36,3 @@ img {
     width: 600px;
 }
 
-/*全页面水印示例 de-comment it*/
-/*div.watermark {*/
-/*    position: fixed;*/
-/*    left: 0;*/
-/*    top: 0;*/
-/*    width: 100vw;*/
-/*    height: 100vh;*/
-/*    background-image: var(--watermark-example);*/
-/*    opacity: .5;*/
-/*    z-index: 3000;*/
-/*    pointer-events: none;*/
-/*}*/
