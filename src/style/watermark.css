@@ -1,0 +1,50 @@
+@import "gallery.css";
+
+:root {
+    /* watermark includes my information */
+    --my-watermark: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KIDx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjMwIiBmaWxsPSIjYTJhOWI2IiBmaWxsLW9wYWNpdHk9IjAuMyIgZm9udC1mYW1pbHk9InN5c3RlbS11aSwgc2Fucy1zZXJpZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdHJhbnNmb3JtPSdyb3RhdGUoLTQ1LCAxMDAgMTAwKSc+MjAxMjUwMDM1IOmCk+WwpOS6rjwvdGV4dD4KPC9zdmc+");
+}
+
+html {
+    color: #ffffff;
+}
+
+h1 {
+    text-align: center;
+}
+
+.item {
+    margin: 0;
+}
+
+.svg-watermark {
+    position: relative;
+}
+
+.watermark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background-image: var(--my-watermark);
+    background-size: 100px;
+}
+
+img {
+    width: 600px;
+}
+
+/*全页面水印示例 de-comment it*/
+/*div.watermark {*/
+/*    position: fixed;*/
+/*    left: 0;*/
+/*    top: 0;*/
+/*    width: 100vw;*/
+/*    height: 100vh;*/
+/*    background-image: var(--watermark-example);*/
+/*    opacity: .5;*/
+/*    z-index: 3000;*/
+/*    pointer-events: none;*/
+/*}*/

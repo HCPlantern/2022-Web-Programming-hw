@@ -3,8 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>Watermark Demo</title>
+    <link rel="icon" href="resource/icon.png">
+    <link rel="stylesheet" href="style/watermark.css">
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
 </head>
 <body>
-
+<div class="header">
+    <span><b>Welcome to <br> Another Simple Gallery</b> <br> Watermark Demo</span>
+    <br>
+    <span><a href="https://hcplantern.cn"><i>by plantern</i></a></span>
+</div>
+<div class="container">
+    <div class="column">
+        <h1>原图</h1>
+        <div class="item" id="original"><img src="resource/9.jpg" alt="pic19"></div>
+        <h1>SVG 水印</h1>
+        <div class="item svg-watermark">
+            <img src="resource/9.jpg" alt="pic19">
+            <div class="watermark"></div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
