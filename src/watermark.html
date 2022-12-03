@@ -5,7 +5,6 @@
     <title>Watermark Demo</title>
     <link rel="icon" href="resource/icon.png">
     <link rel="stylesheet" href="style/watermark.css">
-    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
 </head>
 <body>
 <div class="header">
@@ -14,15 +13,107 @@
     <span><a href="https://hcplantern.cn"><i>by plantern</i></a></span>
 </div>
 <div class="container">
-    <div class="column">
-        <h1>原图</h1>
-        <div class="item" id="original"><img src="resource/9.jpg" alt="pic19"></div>
-        <h1>SVG 水印</h1>
-        <div class="item svg-watermark">
-            <img src="resource/9.jpg" alt="pic19">
-            <div class="watermark"></div>
+    <div class="input">
+        <h1>上传你的图片</h1>
+        <input type="file" id="file" accept="image/*">
+
+        <h1>输入 DCT 水印信息</h1>
+        <label for="msg"></label><input type="text" id="msg" placeholder="在这里输入水印信息">
+        <button id="msgSubmit" onclick="writeIMG()">写入信息</button>
+
+        <h1>从 DCT 水印图片中读取到的信息</h1>
+        <label for="msgRead"></label><input type="text" id="msgRead" placeholder="读取到的水印信息">
+
+    </div>
+
+    <div class="showImage">
+        <div class="item" id="original">
+        </div>
+
+        <div class="item svg-watermark" id="svgWatermark">
+        </div>
+
+        <div class="item dct-watermark" id="dctWatermark">
         </div>
     </div>
 </div>
 </body>
 </html>
+<script src="lib/cryptostego.min.js"></script>
+<script src="lib/jquery-3.6.1.min.js"></script>
+<script>
+
+    // after uploading image, show it
+    $('#file').change(function () {
+        console.log('file changed');
+        const originalDiv = $('#original');
+        const svgWatermarkDiv = $('#svgWatermark');
+        const dctWatermarkDiv = $('#dctWatermark');
+        if (this.files && this.files[0]) {
+            // remove all child elements
+            originalDiv.empty();
+            originalDiv.append('<h1>原图</h1>');
+
+            svgWatermarkDiv.empty()
+            svgWatermarkDiv.append('<h1>SVG 水印</h1>');
+            // for svg image and svg watermark
+            const svgImgAndMarkDiv = $('<div class="imgAndMark" style="position: relative"></div>');
+            svgWatermarkDiv.append(svgImgAndMarkDiv);
+
+            // for dct image
+            dctWatermarkDiv.empty();
+            dctWatermarkDiv.append('<h1>DCT 水印</h1>');
+
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(this.files[0]);
+            img.onload = function () {
+                // 加载原图
+                originalDiv.append(img);
+                console.log('original image loaded');
+                // 加载 svg 水印图
+                svgImgAndMarkDiv.append(img.cloneNode());
+
+                const markDiv = $('<div class="watermark"></div>');
+                svgImgAndMarkDiv.append(markDiv);
+
+                console.log('svg watermark image loaded');
+            }
+        }
+    });
+
+
+    function writeIMG() {
+        const dctWatermarkDiv = $('#dctWatermark');
+        // 清空读取到的信息和 dct 水印图
+        $('msgRead').val('');
+        dctWatermarkDiv.find('img:last').remove();
+
+        // 将上传的图片加载到 canvas 中，并通过 callback 函数写入水印信息
+        loadIMGtoCanvas('file', 'canvas', callbackFunc, 1000);
+
+        function callbackFunc() {
+           writeMsg();
+           readMsg();
+        }
+
+        function writeMsg() {
+            const t = writeMsgToCanvas('canvas', $("#msg").val(), '', 1);
+            if (t === true) {
+                const myCanvas = document.getElementById("canvas");
+                const image = myCanvas.toDataURL("image/png");
+                const imageElem = $('<img alt="dct image">').attr('src', image);
+                dctWatermarkDiv.append(imageElem);
+                console.log('DCT watermark written');
+            } else {
+                console.log('writ DCT watermark failed');
+                console.log(t);
+            }
+        }
+
+        function readMsg() {
+            const msg = readMsgFromCanvas('canvas', '', 1);
+            console.log('read msg from canvas: ' + msg);
+            $('#msgRead').val(msg);
+        }
+    }
+</script>

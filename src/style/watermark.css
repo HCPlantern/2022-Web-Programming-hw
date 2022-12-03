@@ -17,10 +17,6 @@ h1 {
     margin: 0;
 }
 
-.svg-watermark {
-    position: relative;
-}
-
 .watermark {
     position: absolute;
     top: 0;
@@ -32,7 +28,41 @@ h1 {
     background-size: 100px;
 }
 
-img {
-    width: 600px;
+.showImage {
+    display: flex;
 }
 
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 1000px;
+}
+
+.input {
+    display: flex;
+    flex-direction: column;
+    padding: 3rem;
+    width: 50%;
+}
+
+.item {
+    margin: 2rem;
+}
+
+img {
+    width: 300px;
+}
+
+#msg,
+#msgSubmit,
+#msgRead {
+    max-width: 200px;
+    height: 2rem;
+    margin: 1rem auto;
+}
+
+#file {
+    margin: 1rem auto;
+    text-align: center;
+}
