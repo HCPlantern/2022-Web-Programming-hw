@@ -17,7 +17,7 @@
 
 .terms-check,
 .terms-text {
-    color: #4b5057;
+    color: var(--grey-text-color);
 }
 
 

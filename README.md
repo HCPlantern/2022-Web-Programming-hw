@@ -172,3 +172,8 @@ url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9I
 
 
 为了减轻浏览器压力，用户上传图片后将会对其进行压缩，使其不超过 500KB。
+
+## hw4
+
+要求：
+- 在前面一级页面中，实现主题切换。

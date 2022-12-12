@@ -1,7 +1,21 @@
 @import "root.css";
 
+.day {
+    --backgound-color: #fff;
+    --text-color: #353a40;
+    --shadow-color: none;
+    --header-url: url("../resource/Royal Blue.jpg");
+}
+
+.dark {
+    --backgound-color: #21293e;
+    --text-color: #c2beb6;
+    --shadow-color: #00007;
+    --header-url: url("../resource/Lawrencium.jpg");
+}
+
 html {
-    background-color: #21293e;
+    background-color: var(--backgound-color);
 }
 
 body {
@@ -18,7 +32,6 @@ body {
     width: 100%;
     display: flex;
     flex-direction: row-reverse;
-
     padding: 0.5rem 1rem;
     color: #fff;
     font-size: 1.5rem;
@@ -28,7 +41,7 @@ body {
     width: 100%;
     height: 3840px;
     position: relative;
-    background-image: url("../resource/Lawrencium.jpg");
+    background-image: var(--header-url);
     background-repeat: no-repeat;
     background-size: 100%;
     margin-bottom: 4rem;
@@ -40,18 +53,19 @@ body {
     border-radius: 1rem;
 }
 
-.header span {
+.header span,
+.header a {
     color: #fff;
     font-size: 3rem;
     text-align: center;
 }
 
 a {
-    color: #ffffff;
+    color: var(--text-color);
 }
 
 .container {
-    /* display: flex; */
+    display: flex;
     flex: 1;
     max-width: 1200px;
 }
@@ -71,7 +85,7 @@ img {
     width: 300px;
     border-radius: 1rem;
     transition: transform 0.5s;
-    box-shadow: rgb(0 0 0 / 50%) 0 15px 25px
+    box-shadow: var(--shadow-color) 0 15px 25px
 }
 
 img:hover,
