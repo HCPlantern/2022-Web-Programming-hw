@@ -177,3 +177,65 @@ url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9I
 
 要求：
 - 在前面一级页面中，实现主题切换。
+
+实现方法：
+
+为不同的类名设置不同的根变量，在 CSS 文件中通过调用这些颜色变量来实现不同的主题颜色效果；通过 JS 脚本实现点击按钮切换 `body` 类名，从而实现主题切换。
+
+例如，在`root.css`中，定义如下变量：
+
+```css
+
+.day {
+    --backgound-color: #fff;
+    --text-color: #353a40;
+    --grey-text-color: #6c757d;
+    --backgound-grey-color: #e9eaf2;
+    --border-color: #e9eaf2;
+    --text-hover-color: #5b5f62;
+    /* 登陆框相关颜色 */
+    --input-color: #f5f6fa;
+    --input-focus-color: #e8eaf3;
+    --submit-button-color: #3b5998;
+    --submit-text-color: #fafbfc;
+    --submit-button-hover-color: #38487e;
+    --foot-color: #f8f9fa;
+    --foot-text-color: #6c757d;
+}
+
+.dark {
+    --backgound-color: #181a1b;
+    --text-color: #c2beb6;
+    --grey-text-color: #c2beb6;
+    --backgound-grey-color: #232526;
+    --border-color: #272b48;
+    --text-hover-color: #5b5f62;
+    /* 登陆框相关颜色 */
+    --input-color: #1d1f20;
+    --input-focus-color: #232526;
+    --submit-button-color: #37467c;
+    --submit-text-color: #fafbfc;
+    --submit-button-hover-color: #2d3964;
+    --foot-color: #1c1e1f;
+    --foot-text-color: #6c757d;
+}
+
+```
+
+`login.html` `regiser.html` `watermakr.html` 均支持主题切换。
+
+登陆界面如下：
+
+![image-20221213000658282](https://cdn.hcplantern.cn/img/2022/12/13/20221213-000659.png-default)
+
+![image-20221213000702578](https://cdn.hcplantern.cn/img/2022/12/13/20221213-000703.png-default)
+
+
+
+画册界面如下：
+
+![image-20221213000717592](https://cdn.hcplantern.cn/img/2022/12/13/20221213-000719.png-default)
+
+![image-20221213000723011](https://cdn.hcplantern.cn/img/2022/12/13/20221213-000724.png-default)
+
+点击页面中的 `切换主题` 即可。
