@@ -21,7 +21,7 @@ app.use(
 );
 
 // 创建服务器
-// 监听3001端口
+// 监听8080端口
 app.listen(8080, () => {
     console.log("服务器启动，端口：8080");
 });
@@ -103,18 +103,19 @@ app.post("/api/login", async (req, res) => {
     });
 });
 
-app.get("/api/profile", (req, res) => {
+// 判断是否有权限
+app.get("/api/auth", (req, res) => {
     const token = req.headers.authorization.split(" ")[1];
-    const {id} = jwt.verify(token, SECRET);
-    const sql = `select * from users where username = ?`;
-    db.all(sql, [id], (err, row) => {
-        if (err) {
-            console.log(err)
-            return res.status(400).json({error: err.message});
-        } else {
-            return res.json(row);
+    // 使用 jwt 进行 token 验证
+    try {
+        const {id} = jwt.verify(token, SECRET);
+        if (id) {
+            return res.status(200).json({msg: "已鉴权"});
         }
-    });
+    } catch (err) {
+        console.log(err);
+        return res.status(401).json({error: err.message});
+    }
 });
 
 // close the database connection
