@@ -4,14 +4,14 @@
     --backgound-color: #fff;
     --text-color: #353a40;
     --shadow-color: none;
-    --header-url: url("../resource/Royal Blue.jpg");
+    --header-url: url("/resource/Royal Blue.jpg");
 }
 
 .dark {
     --backgound-color: #21293e;
     --text-color: #c2beb6;
     --shadow-color: #00007;
-    --header-url: url("../resource/Lawrencium.jpg");
+    --header-url: url("/resource/Lawrencium.jpg");
 }
 
 html {

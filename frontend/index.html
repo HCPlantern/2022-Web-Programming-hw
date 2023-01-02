@@ -4,12 +4,15 @@
     <meta charset="UTF-8">
     <title>Another Simple Gallery</title>
     <link rel="icon" href="resource/icon.png">
-    <link rel="stylesheet" href="style/gallery.css">
+    <link rel="stylesheet" href="./style/index.css">
+    <script src="lib/jquery-3.6.1.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="script/index.js"></script>
 </head>
 <body>
 <div class="banner">
     <div class="banner right">
-        <a style="margin: 1rem" href="login.html">Log Out</a>
+        <a style="margin: 1rem" onclick="logout()">Log Out</a>
         <a style="margin: 1rem; cursor: pointer" onclick="changeTheme()">切换主题</a>
     </div>
 </div>
