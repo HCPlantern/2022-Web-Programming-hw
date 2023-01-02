@@ -5,27 +5,30 @@ crypto = require('crypto');
 const argon2 = require('argon2');
 const jwt = require("jsonwebtoken");
 const app = express();
+const cors = require('cors');
 // 此变量为解析 token 密匙
 const SECRET = "MRojcCRvjSg4xb";
 const db_file = "db/users.db"
 
-app.use(express.json())
+// 允许跨域
+const corsOptions ={
+    origin: '*',
+    credentials:true,            //access-control-allow-credentials:true
+    optionSuccessStatus:200,
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedMethods: ['GET', 'POST']
+}
+app.use(cors(corsOptions));
 
 // 解析 post 请求体
-app.use(bodyParser.json({limit: "1mb"})); //body-parser 解析json格式数据
-app.use(
-    bodyParser.urlencoded({
-        //此项必须在 bodyParser.json 下面,为参数编码
-        extended: true,
-    })
-);
+app.use(express.json()); //express 解析json格式数据
+app.use(express.urlencoded({extended: true,}));
 
 // 创建服务器
 // 监听8080端口
 app.listen(8080, () => {
     console.log("服务器启动，端口：8080");
 });
-
 
 const sqlite3 = require('sqlite3').verbose();
 
@@ -87,6 +90,7 @@ app.post("/api/login", async (req, res) => {
             return res.status(400).json({error: err.message});
         } else {
             if (row.length === 0) {
+                console.log("用户不存在")
                 return res.status(400).json({error: "用户不存在"});
             }
             const hashedPassword = row[0].password;
@@ -94,8 +98,10 @@ app.post("/api/login", async (req, res) => {
             argon2.verify(hashedPassword, password).then((match) => {
                 if (match) {
                     const token = jwt.sign({id: row[0].username}, SECRET);
+                    console.log('token: ', token);
                     return res.json({username, token});
                 } else {
+                    console.log("密码错误")
                     return res.status(400).json({error: "邮箱或密码错误"});
                 }
             });
