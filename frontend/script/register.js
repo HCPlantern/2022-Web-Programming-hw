@@ -30,6 +30,7 @@ $('#submit').click(function () {
     const email = $('#email').val();
     const password = $('#password').val();
     const password2 = $('#password2').val();
+    const code = $('#code').val();
     // 验证邮箱
     if (validateEmail(email) === null) {
         alert("邮箱格式不正确");
@@ -44,6 +45,11 @@ $('#submit').click(function () {
         alert("两次输入的密码不一致");
         return false;
     }
+    // 检查验证码
+    if (code === null) {
+        alert("验证码不能为空");
+        return false;
+    }
     // 检查是否勾选了同意协议
     if (!$('#terms-check').is(':checked')) {
         alert("请勾选同意协议");
@@ -52,7 +58,8 @@ $('#submit').click(function () {
 
     let data = {
         username: email,
-        password: password
+        password: password,
+        code: code
     }
     const options = {
         url: 'http://localhost:8080/api/register',
@@ -74,4 +81,25 @@ $('#submit').click(function () {
             console.log(error.response.data.error);
             alert(error.response.data.error);
         })
+})
+
+$('#codeSubmit').click(function () {
+    const email = $('#email').val();
+    // 检查邮箱
+    if (email === null) {
+        alert("邮箱不能为空");
+        return false;
+    } else if (validateEmail(email) === null) {
+        alert("邮箱格式不正确");
+        return false;
+    }
+    const options = {
+        url: 'http://localhost:8080/api/email',
+        method: 'post',
+        headers: {'content-type': 'application/x-www-form-urlencoded'},
+        data: {
+            email: email
+        }
+    }
+    axios(options)
 })

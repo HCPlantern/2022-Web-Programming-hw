@@ -20,4 +20,16 @@
     color: var(--grey-text-color);
 }
 
+.verification-code {
+    display: flex;
+    align-items: center;
+}
 
+#code {
+    margin-right: 0.5rem;
+}
+
+#codeSubmit {
+    margin-left: 0.5rem;
+    text-align: center;
+}
