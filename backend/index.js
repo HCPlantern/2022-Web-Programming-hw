@@ -39,6 +39,37 @@ const db = new sqlite3.Database(
             return console.log(err.message)
         }
         console.log('connect database successfully')
+        const create_users = `
+            CREATE TABLE if not exists users
+            (
+                username TEXT
+                    constraint users_pk
+                        primary key,
+                password TEXT
+            );`
+        const create_code = `
+            CREATE TABLE if not exists code
+            (
+                code_id INTEGER not null
+                    constraint code_pk
+                        primary key autoincrement,
+                email   TEXT    not null,
+                code    TEXT    not null
+            );`
+        db.run(create_users, function (err) {
+            if (err) {
+                console.log('create table error: ' + err.message)
+                return console.log(err.message)
+            }
+            console.log('successfully create table users')
+        })
+        db.run(create_code, function (err) {
+            if (err) {
+                console.log('create table error: ' + err.message)
+                return console.log(err.message)
+            }
+            console.log('successfully create table code')
+        })
     }
 )
 
@@ -153,7 +184,6 @@ app.get("/api/auth", (req, res) => {
 
 const nodemailer = require('nodemailer')
 const smtpTransport = require('nodemailer-smtp-transport')
-const assert = require('http-assert')
 
 const transport = nodemailer.createTransport(smtpTransport({
     host: 'smtp.qq.com', // 服务 由于我用的163邮箱
@@ -188,7 +218,7 @@ app.post('/api/email', async (req, res) => {
             <p>你的验证码是：<strong style="color: #ff4e2a;">${code}</strong></p>
             <p>***该验证码5分钟内有效***</p>` // html 内容
             },
-            function (error, data) {
+            function (error) {
                 if (error) {
                     console.log(error);
                     return res.status(400).json({error: error.message});
