@@ -252,7 +252,7 @@ url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9I
 - 后端使用 argon2 对密码进行加密
 - 后端使用 jwt 实现鉴权接口
 
-演示视频：https://box.nju.edu.cn/f/eeb8c51799b54accaf80/
+演示视频：https://box.nju.edu.cn/f/a97588d68de647c78071/
 
 项目地址：[HCPlantern/2022-Web-Programming-hw: Web-Programming-hw archive 前端开发课程作业](https://github.com/HCPlantern/2022-Web-Programming-hw)
 
