@@ -1,28 +1,20 @@
 
-const validateEmail = (email) => {
-    return String(email)
-        .toLowerCase()
-        .match(
-            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-        );
-};
-
-// 密码需要包含大写字母，小写字母和数字，长度 6-16 位
-const validatePassword = (password) => {
-    return String(password).match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,16}$/);
+// 主题设置相关
+let themes = ["day", "dark"];
+let i = 0;
+let changeTheme = function () {
+    i = (i + 1) % themes.length;
+    document.body.className = themes[i];
 }
+$(document).ready(function () {
+    document.body.className = themes[i];
+});
 
 $('#submit').click(function () {
     const email = $('#email').val();
     const password = $('#password').val();
-    // 验证邮箱
-    if (validateEmail(email) === null) {
-        alert("邮箱格式不正确");
-        return false;
-    }
-    // 验证密码
-    if (validatePassword(password) === null) {
-        alert("密码需包含大小写字母和数字，长度 6-16 位");
+    if (email === '' || password === '') {
+        alert('邮箱或密码不能为空');
         return false;
     }
 

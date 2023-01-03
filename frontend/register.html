@@ -8,6 +8,8 @@
     <meta name="description" content="This is a picture gallery">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="style/register.css">
+    <script src="lib/jquery-3.6.1.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <body>
 <div class="container">
@@ -17,24 +19,25 @@
             <span class="title-subtext">by <a href="https://hcplantern.cn" target="_blank">plantern</a></span>
             <br>
         </div>
-        <form class="input">
+        <div class="input">
             <label>
-                <input class="input email" type="email" name="email" placeholder="Email">
+                <input class="input email" id="email" type="email" name="email" placeholder="Email">
             </label>
             <label>
-                <input class="input password" type="password" name="password" placeholder="Password">
+                <input class="input password" id="password" type="password" name="password" placeholder="Password">
             </label>
             <label>
-                <input class="input password" type="password" name="password-second" placeholder="Password Again">
+                <input class="input password" id="password2" type="password" name="password-second"
+                       placeholder="Password Again">
             </label>
             <div class="terms">
                 <label>
-                    <input class="terms-check" type="checkbox" name="terms" value="terms">
+                    <input class="terms-check" id="terms-check" type="checkbox" name="terms" value="terms">
                 </label>
                 <span>I have read and agree to the <a href="https://unsplash.com/terms">terms of service</a></span>
             </div>
-            <input class="submit" type="submit" value="😋Register">
-        </form>
+            <input class="submit" id="submit" type="submit" value="😋Register">
+        </div>
     </div>
     <div class="foot">
         <div class="foot left">
@@ -45,6 +48,6 @@
         </div>
     </div>
 </div>
-<script src="script/theme.js"></script>
+<script src="script/register.js"></script>
 </body>
 </html>
