@@ -57,7 +57,9 @@ input {
 }
 
 .input.email,
-.input.password {
+.input.password,
+.input.phone,
+.input.code {
     background-color: var(--input-color);
 }
 

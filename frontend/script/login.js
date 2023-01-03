@@ -31,7 +31,6 @@ $('#submit').click(function () {
     }
     axios(options)
         .then((response) => {
-            // console.log(response.data);
             if (response.status === 200) {
                 // 登陆成功，保存 token
                 window.localStorage.setItem("token", response.data.token);
