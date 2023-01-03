@@ -239,3 +239,285 @@ url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9I
 ![image-20221213000723011](https://cdn.hcplantern.cn/img/2022/12/13/20221213-000724.png-default)
 
 点击页面中的 `切换主题` 即可。
+
+
+
+## hw5
+
+### 简介
+
+- 实现登陆、注册功能
+- 使用 Node.js 搭建后端，数据库使用 SQLite3
+- 使用邮箱注册和登录，实现邮箱验证码
+- 后端使用 argon2 对密码进行加密
+- 后端使用 jwt 实现鉴权接口
+
+演示视频：https://box.nju.edu.cn/f/eeb8c51799b54accaf80/
+
+项目地址：[HCPlantern/2022-Web-Programming-hw: Web-Programming-hw archive 前端开发课程作业](https://github.com/HCPlantern/2022-Web-Programming-hw)
+
+### 运行
+
+- 前端：静态页面，点击 `/frontend/index.html` 即可
+- 后端：命令行运行 `node index.js` 即可，Node.js 版本推荐为 `19.3.0`
+
+### 前端部分
+
+#### 图库
+
+图库页面为 `index.html` ，界面见演示视频。
+
+鉴权部分：进入图库时，会验证本地 localStorage 是否存在 token，并调用后端接口对 token 进行验证，若成功，后端将会返回用户信息。否则将拒绝用户进入图库，界面跳转至登陆界面。见演示视频。
+
+#### 登陆
+
+登陆页面为 `login.html`，界面与 hw4 基本一致
+
+#### 注册
+
+注册页面为 `register.html`，可通过登陆界面跳转
+
+#### 正则表达式验证邮箱和密码
+
+`register.js` 中会对邮箱格式和密码强度进行验证：
+
+```js
+const validateEmail = (email) => {
+    return String(email)
+        .toLowerCase()
+        .match(
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
+};
+
+// 密码需要包含大写字母，小写字母和数字，长度 6-16 位
+const validatePassword = (password) => {
+    return String(password).match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,16}$/);
+}
+```
+
+此外，注册时还会对其他方面进行验证，比如两次密码是否正确、是否勾选同意服务条款。
+
+### 功能详解
+
+#### 数据库
+
+数据库使用轻量级 SQLite3，数据库文件为 `/backend/db/gallery.db` ，其中存在两张表，`users` 为邮箱和加密密码，`code` 存放已发送的邮箱验证码。
+
+#### 用户密码加密
+
+用户密码使用 argon2 进行加密，注册时，调用接口并存入数据库：
+
+```javascript
+            // 密码进行加密
+            try {
+                const hashedPassword = await argon2.hash(password).then((hash) => hash);
+                // 将用户名和密码存入数据库
+                const sql = `insert into users (username, password)
+                             values (?, ?)`;
+                db.run(sql, [username, hashedPassword], (err) => {
+                    if (err) {
+                        console.log(err)
+                        if (err.errno === 19) {
+                            return res.status(400).json({error: "用户名已存在，请登录"});
+                        }
+                        return res.status(400).json({error: err.message});
+                    } else {
+                        return res.send("用户注册成功");
+                    }
+                });
+            } catch (err) {
+                console.log(err);
+                return res.status(500).json({error: err.message});
+            }
+```
+
+登陆时，调用接口进行验证：
+
+```javascript
+        const hashedPassword = row[0].password; // 从数据库取出的密码
+        // 使用 argon2 进行密码验证
+        argon2.verify(hashedPassword, password).then((match) => {
+            if (match) {
+                const token = jwt.sign({id: row[0].username}, SECRET);
+                console.log('token: ', token);
+                return res.json({username, token});
+            } else {
+                console.log("密码错误")
+                return res.status(400).json({error: "邮箱或密码错误"});
+            }
+        });
+```
+
+#### 鉴权
+
+用户登陆时，后端会调用jwt生成token并返回给前端：
+
+```javascript
+const token = jwt.sign({id: row[0].username}, SECRET);
+return res.json({username, token});
+```
+
+前端收到后存入localStorage
+
+```javascript
+    const options = {
+        url: 'http://localhost:8080/api/login',
+        method: 'post',
+        headers: {'content-type': 'application/x-www-form-urlencoded'},
+        data: data
+    }
+    axios(options)
+        .then((response) => {
+            if (response.status === 200) {
+                // 登陆成功，保存 token
+                window.localStorage.setItem("token", response.data.token);
+                // 跳转到首页
+                window.location.href = "./index.html";
+            } else {
+                console.log(response.data)
+                alert(response.data.error);
+            }
+        })
+```
+
+在用户访问图库页面 `index.html`时，将会调用后端接口进行鉴权并取得用户信息，若鉴权失败则跳转至登陆界面
+
+```javascript
+    let options = {
+        url: 'http://localhost:8080/api/auth',
+        method: 'get',
+        headers: {'Authorization': 'Bearer ' + token}
+    }
+    // token 存在，检查是否过期
+    axios(options)
+        .then((response) => {
+            console.log(response);
+            if (response.status === 200) {
+                console.log("token 有效，可以访问");
+                let username = response.data.username;
+                $("#userInfo").text(username);
+            } else {
+                console.log("token 无效，需要重新登陆");
+                alert("请重新登陆！")
+                window.localStorage.removeItem("token");
+                window.location.href = "login.html";
+            }
+        });
+```
+
+后端接口部分，通过 jwt 进行 token 验证
+
+```javascript
+// 判断是否有权限
+app.get("/api/auth", (req, res) => {
+    const token = req.headers.authorization.split(" ")[1];
+    // 使用 jwt 进行 token 验证
+    try {
+        const {id} = jwt.verify(token, SECRET);
+        if (id) {
+            return res.status(200).json({username: id, msg: "已鉴权"});
+        }
+    } catch (err) {
+        console.log(err);
+        return res.status(401).json({error: err.message});
+    }
+});
+```
+
+#### 邮箱验证码
+
+使用 `nodemailer` 和 `nodemailer-smtp-transport` 模块。
+
+smtp 选用了qq邮箱提供的服务.
+
+前端通过 `/api/email`接口传入一个邮箱，后端首先生成验证码，并发送给邮箱，同时将该验证码存入数据库中，设置5分钟自动删除。
+
+后端接口实现：
+
+```javascript
+app.post('/api/email', async (req, res) => {
+    const {email} = req.body;
+    if (regEmail.test(email)) {
+        let code = randomFns();
+        await transport.sendMail({
+                from: 'hcplantern@foxmail.com', // 发件邮箱
+                to: email, // 收件列表
+                subject: '验证你的电子邮件', // 标题
+                html: `
+            <p>你好！</p>
+            <p>您正在注册 Another Simple Gallery 账号</p>
+            <p>你的验证码是：<strong style="color: #ff4e2a;">${code}</strong></p>
+            <p>***该验证码5分钟内有效***</p>` // html 内容
+            },
+            function (error) {
+                if (error) {
+                    console.log(error);
+                    return res.status(400).json({error: error.message});
+                }
+                transport.close(); // 如果没用，关闭连接池
+            })
+        const deleteSql = `delete
+                           from code
+                           where email = ?`;
+        const insertSql = `insert into code (email, code)
+                           values (?, ?)`;
+        // 首先删除该邮箱之前的验证码
+        db.serialize(() => {
+            db.run(deleteSql, [email], (err) => {
+                if (err) {
+                    console.log(err);
+                    return res.status(400).json({error: err.message});
+                }
+            })
+            // 然后插入新的验证码
+            db.run(insertSql, [email, code], (err) => {
+                if (err) {
+                    console.log(err);
+                    return res.status(400).json({error: err.message});
+                }
+            })
+        })
+        setTimeout(async () => {
+            await db.run(deleteSql, [email], (err) => {
+                if (err) {
+                    console.log(err);
+                    return res.status(400).json({error: err.message});
+                }
+            })
+        }, 1000 * 60 * 5)
+    } else {
+        return res.status(400).json({error: "邮箱格式错误！"});
+    }
+
+})
+
+```
+
+在用户注册时，会同时验证用户输入的验证码，验证成功则删除该验证码 。`/api/register` 部分实现：
+
+```javascript
+    const codeSql = `SELECT *
+                     FROM code
+                     WHERE email = ?
+                       AND code = ?`
+    db.all(codeSql, [username, code], async function (err, rows) {
+        if (err) {
+            console.log(err)
+            return res.status(400).json({error: "验证码错误"});
+        } else {
+            if (rows.length !== 1) {
+                console.log("验证码错误")
+                return res.status(400).json({error: "验证码错误"});
+            }
+            // 验证通过，删除验证码
+            console.log("验证码验证通过")
+            const deleteCodeSql = `DELETE
+                                   FROM code
+                                   WHERE email = ?`
+            db.run(deleteCodeSql, [username]);
+
+```
+
+
+
