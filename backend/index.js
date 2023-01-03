@@ -175,8 +175,7 @@ const randomFns = () => { // 生成6位随机数
 const regEmail = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/ //验证邮箱正则
 
 app.post('/api/email', async (req, res) => {
-    const {username} = req.body;
-    const email = username;
+    const {email} = req.body;
     if (regEmail.test(email)) {
         let code = randomFns();
         await transport.sendMail({
