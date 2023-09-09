@@ -47,3 +47,6 @@ $('#submit').click(function () {
         })
 });
 
+let skipLogin = () => {
+    window.location.href = "./index.html";
+}

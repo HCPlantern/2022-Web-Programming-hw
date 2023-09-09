@@ -22,14 +22,17 @@
 
 .verification-code {
     display: flex;
-    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
 #code {
-    margin-right: 0.5rem;
+    flex-basis: 10rem;
+    flex-grow: 1;
+    flex-shrink: 0;
 }
 
 #codeSubmit {
-    margin-left: 0.5rem;
+    flex-basis: 5rem;
     text-align: center;
 }
